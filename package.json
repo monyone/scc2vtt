@@ -1,0 +1,18 @@
+{
+  "name": "scc2vtt",
+  "version": "0.0.1",
+  "main": "index.js",
+  "license": "MIT",
+  "private": true,
+  "devDependencies": {
+    "@types/node": "^16.18.39",
+    "npm-run-all": "^4.1.5",
+    "rimraf": "^5.0.1",
+    "typescript": "^5.1.6"
+  },
+  "scripts": {
+    "tsc": "tsc",
+    "build": "npm-run-all clean tsc",
+    "clean": "rimraf dist d.ts"
+  }
+}
