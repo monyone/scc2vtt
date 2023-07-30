@@ -57,6 +57,13 @@ export default class CEA608 {
   }
   private clearRegions(): void {
     this.regions = [];
+    this.state = {
+      row: 10,
+      column: 0,
+      foreground: 'white',
+      background: 'black',
+      underline: false
+    };
     this.styleChanged = true;
   }
 
@@ -69,24 +76,29 @@ export default class CEA608 {
 
   private parseOtherCommand(cc_data_0: number, cc_data_1: number): boolean {
     const hasNormalCommand = [0x14 /*CC1*/, 0x1C /*CC2*/, 0x15 /*CC3*/, 0x1D /*CC4*/].includes(cc_data_0) && (0x20 <= cc_data_1 && cc_data_1 <= 0x2F);
-    const hasTabOffset = [0x17 /*CC1/3*/, 0x1F /*CC2/4*/].includes(cc_data_0) && (0x10 <= cc_data_1 && cc_data_1 <= 0x23);
+    const hasTabOffset = [0x17 /*CC1/3*/, 0x1F /*CC2/4*/].includes(cc_data_0) && (0x21 <= cc_data_1 && cc_data_1 <= 0x23);
     if (!(hasNormalCommand || hasTabOffset)) { return false; }
 
-    switch(cc_data_1) {
-      case 0x20:
-        this.clearscrren = true;
-        this.clearRegions()
-        break;
-      case 0x21: // Backspace
-        //this.parseBackspace();
-        break;
-      case 0x2C:
-        this.clearscrren = true;
-        this.clearRegions()
-        break;
-      default:
-        // TODO: Implement
-        break;
+    if (hasNormalCommand) {
+      switch(cc_data_1) {
+        case 0x20:
+          this.clearscrren = true;
+          this.clearRegions()
+          break;
+        case 0x21: // Backspace
+          console.log('back')
+          this.state.column--;
+          break;
+        case 0x2C:
+          this.clearscrren = true;
+          this.clearRegions()
+          break;
+        default:
+          // TODO: Implement
+          break;
+      }
+    } else { // TAB
+      this.state.column += cc_data_1 - 0x20;
     }
 
     return true;

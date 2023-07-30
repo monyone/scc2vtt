@@ -39,7 +39,7 @@ const parseSCC = (scc: string) => {
     const [p_timestamp, p_regions] = previous;
     if (p_regions.length > 0) {
       const vtts = p_regions.map((region) => {
-        const header = `${tiemstamp_for_vtt(p_timestamp)} --> ${tiemstamp_for_vtt(timestamp)} lines:${region.row} position:${region.column / 32 * 100}% align:left`
+        const header = `${tiemstamp_for_vtt(p_timestamp)} --> ${tiemstamp_for_vtt(timestamp)} lines:${region.row + 1} position:${Math.trunc(region.column / 32 * 10000) / 100}% align:left`
         return `${header}\n${region.text}\n\n`;
       });
 
